@@ -4,7 +4,6 @@ from DecisionNode import DecisionNode
 
 import pandas as pd
 import yfinance as yf
-import matplotlib.pyplot as plt
 
 
 class CompanyRunner:
@@ -12,7 +11,6 @@ class CompanyRunner:
     # ----------------------------------
     # Utility: safe numeric input
     # ----------------------------------
-
     def get_float(self, prompt):
 
         while True:
@@ -24,10 +22,87 @@ class CompanyRunner:
                 print("Please enter a valid numeric value.")
 
     # ----------------------------------
+    # Cash flow explanation layer
+    # ----------------------------------
+    def explain_cash_flow(
+        self,
+        cash_ctx,
+        revenue,
+        industry_avg_fcf
+    ):
+
+        fcf_margin = (
+            cash_ctx["free_cash_flow"] / revenue
+        )
+
+        print("\n--- CASH FLOW ANALYSIS ---")
+
+        print(
+            f"Operating Cash Flow: "
+            f"{cash_ctx['operating_cash_flow']}"
+        )
+
+        print(
+            f"Free Cash Flow: "
+            f"{cash_ctx['free_cash_flow']}"
+        )
+
+        print(
+            f"Free Cash Flow Margin: "
+            f"{fcf_margin:.2%}"
+        )
+
+        if cash_ctx["earnings_quality_strong"]:
+
+            print(
+                "• Free cash flow closely "
+                "tracks earnings."
+            )
+
+        else:
+
+            print(
+                "• Earnings and cash flow "
+                "are diverging."
+            )
+
+        if cash_ctx["strong_liquidity"]:
+
+            print("• Strong liquidity position.")
+
+        elif cash_ctx["cash_flow_pressure"]:
+
+            print("• Liquidity pressure detected.")
+
+        else:
+
+            print("• Neutral liquidity profile.")
+
+        if (
+            cash_ctx["free_cash_flow"]
+            > industry_avg_fcf
+        ):
+
+            print(
+                "• Cash generation exceeds "
+                "industry average."
+            )
+
+        else:
+
+            print(
+                "• Cash generation trails "
+                "industry average."
+            )
+
+    # ----------------------------------
     # Binary search helper
     # ----------------------------------
-
-    def binary_search_position(self, sorted_values, target):
+    def binary_search_position(
+        self,
+        sorted_values,
+        target
+    ):
 
         low = 0
         high = len(sorted_values)
@@ -37,9 +112,11 @@ class CompanyRunner:
             mid = (low + high) // 2
 
             if sorted_values[mid] < target:
+
                 low = mid + 1
 
             else:
+
                 high = mid
 
         return low
@@ -47,8 +124,11 @@ class CompanyRunner:
     # ----------------------------------
     # Revenue ranking
     # ----------------------------------
-
-    def rank_by_revenue(self, peers_df, company_revenue):
+    def rank_by_revenue(
+        self,
+        peers_df,
+        company_revenue
+    ):
 
         sorted_df = (
             peers_df
@@ -78,17 +158,24 @@ class CompanyRunner:
         )
 
         return {
+
             "rank": position + 1,
+
             "total": len(revenues) + 1,
+
             "left_peer": left_peer,
+
             "right_peer": right_peer
         }
 
     # ----------------------------------
-    # Net Income ranking
+    # Net income ranking
     # ----------------------------------
-
-    def rank_by_netIncome(self, peers_df, company_netIncome):
+    def rank_by_netIncome(
+        self,
+        peers_df,
+        company_netIncome
+    ):
 
         sorted_df = (
             peers_df
@@ -118,17 +205,24 @@ class CompanyRunner:
         )
 
         return {
+
             "rank": position + 1,
+
             "total": len(net_incomes) + 1,
+
             "left_peer": left_peer,
+
             "right_peer": right_peer
         }
 
     # ----------------------------------
     # EBITDA ranking
     # ----------------------------------
-
-    def rank_by_ebitda(self, peers_df, company_ebitda):
+    def rank_by_ebitda(
+        self,
+        peers_df,
+        company_ebitda
+    ):
 
         sorted_df = (
             peers_df
@@ -158,45 +252,64 @@ class CompanyRunner:
         )
 
         return {
+
             "rank": position + 1,
+
             "total": len(ebitdas) + 1,
+
             "left_peer": left_peer,
+
             "right_peer": right_peer
         }
 
     # ----------------------------------
     # Decision-tree evaluation
     # ----------------------------------
-
-    def evaluate_tree(self, node, context):
+    def evaluate_tree(
+        self,
+        node,
+        context
+    ):
 
         if node.result is not None:
+
             return node.result
 
         if node.condition(context):
-            return self.evaluate_tree(node.yes, context)
 
-        return self.evaluate_tree(node.no, context)
+            return self.evaluate_tree(
+                node.yes,
+                context
+            )
+
+        else:
+
+            return self.evaluate_tree(
+                node.no,
+                context
+            )
 
     # ----------------------------------
-    # Profitability tree
+    # Profitability decision tree
     # ----------------------------------
-
     def build_profitability_tree(self):
 
         margin_above = (
             lambda ctx:
-            ctx["company_margin"] > ctx["industry_margin"]
+            ctx["company_margin"]
+            > ctx["industry_margin"]
         )
 
         revenue_above = (
             lambda ctx:
-            ctx["company_revenue"] > ctx["industry_revenue"]
+            ctx["company_revenue"]
+            > ctx["industry_revenue"]
         )
 
         ebitda_above = (
             lambda ctx:
-            ctx["company_ebitda"] > ctx["industry_ebitda"]
+            ctx["company_ebitda"]
+            > ctx["industry_ebitda"]
         )
 
         return DecisionNode(
@@ -242,89 +355,54 @@ class CompanyRunner:
     # ----------------------------------
     # Explanation layer
     # ----------------------------------
-
-    def explain_classification(self, label):
+    def explain_classification(
+        self,
+        label
+    ):
 
         explanations = {
 
             "Industry Leader":
-                "Strong operational efficiency and revenue "
-                "scale relative to industry peers.",
+                "The company demonstrates strong "
+                "operational efficiency and "
+                "competitive scale relative to "
+                "industry peers.",
 
             "Efficient but Under-Scaled":
-                "Strong profitability but smaller revenue "
-                "scale than competitors.",
+                "The company maintains healthy "
+                "profitability margins but operates "
+                "at a smaller revenue scale.",
 
             "Margin Strong but Operationally Weak":
-                "Healthy accounting profitability but weaker "
-                "EBITDA performance relative to peers.",
+                "The company reports healthy margins "
+                "but weaker EBITDA performance "
+                "relative to peers.",
 
             "Scale Without Efficiency":
-                "Strong revenue generation but weak "
+                "The company generates significant "
+                "revenue but exhibits weaker "
                 "profitability efficiency.",
 
             "Underperformer":
-                "Weak profitability and revenue relative "
-                "to industry benchmarks."
+                "The company trails peers in both "
+                "profitability and scale."
         }
 
         return explanations[label]
 
     # ----------------------------------
-    # Graphing function
-    # ----------------------------------
-
-    def graph_industry_metrics(self, peers_df):
-
-        top_companies = (
-            peers_df
-            .sort_values(by="Revenue", ascending=False)
-            .head(10)
-        )
-
-        x = top_companies["Security"]
-
-        plt.figure(figsize=(14, 7))
-
-        plt.plot(
-            x,
-            top_companies["Revenue"],
-            label="Revenue"
-        )
-
-        plt.plot(
-            x,
-            top_companies["Net Income"],
-            label="Net Income"
-        )
-
-        plt.plot(
-            x,
-            top_companies["EBITDA"],
-            label="EBITDA"
-        )
-
-        plt.xticks(rotation=45)
-
-        plt.xlabel("Companies")
-        plt.ylabel("Financial Metrics")
-
-        plt.title("Industry Competitive Analysis")
-
-        plt.legend()
-
-        plt.tight_layout()
-
-        plt.show()
-
-    # ----------------------------------
     # Main workflow
     # ----------------------------------
-
     def run(self):
 
         print("""
 Welcome to the Company Performance Analysis Engine.
+
+This tool evaluates:
+• Profitability
+• Peer benchmarking
+• Ranking systems
+• Decision-tree logic
 """)
 
         # ----------------------------------
@@ -333,15 +411,26 @@ Welcome to the Company Performance Analysis Engine.
 
         df = pd.read_csv("sample_data.csv")
 
+        df = df.sort_values(by="GICS Sector")
+
+        # ----------------------------------
+        # Add financial columns
+        # ----------------------------------
+
         df["Revenue"] = None
         df["Net Income"] = None
         df["EBITDA"] = None
 
+        # Cash flow metrics
+        df["Working Capital"] = None
+        df["Operating Cash Flow"] = None
+        df["Free Cash Flow"] = None
+
         # ----------------------------------
-        # Pull Yahoo Finance data
+        # Pull Yahoo Finance metrics
         # ----------------------------------
 
-        print("\nLoading financial dataset...\n")
+        print("\nLoading company financial data...\n")
 
         for index, row in df.iterrows():
 
@@ -352,60 +441,215 @@ Welcome to the Company Performance Analysis Engine.
                 stock = yf.Ticker(ticker)
 
                 financials = stock.financials
+                cashflow = stock.cashflow
+                balance_sheet = stock.balance_sheet
                 info = stock.info
 
                 revenue = None
                 net_income = None
-                ebitda = info.get("ebitda", None)
+                ebitda = None
+
+                working_capital = None
+                operating_cash_flow = None
+                free_cash_flow = None
+
+                # ------------------------------
+                # Revenue
+                # ------------------------------
 
                 if "Total Revenue" in financials.index:
+
                     revenue = (
                         financials
                         .loc["Total Revenue"]
                         .iloc[0]
                     )
 
+                # ------------------------------
+                # Net Income
+                # ------------------------------
+
                 if "Net Income" in financials.index:
+
                     net_income = (
                         financials
                         .loc["Net Income"]
                         .iloc[0]
                     )
 
+                # ------------------------------
+                # EBITDA
+                # ------------------------------
+
+                ebitda = info.get(
+                    "ebitda",
+                    None
+                )
+
+                # ------------------------------
+                # Operating Cash Flow
+                # ------------------------------
+
+                if (
+                    "Operating Cash Flow"
+                    in cashflow.index
+                ):
+
+                    operating_cash_flow = (
+                        cashflow
+                        .loc["Operating Cash Flow"]
+                        .iloc[0]
+                    )
+
+                # ------------------------------
+                # Free Cash Flow
+                # ------------------------------
+
+                if (
+                    "Operating Cash Flow"
+                    in cashflow.index
+                    and
+                    "Capital Expenditure"
+                    in cashflow.index
+                ):
+
+                    ocf = (
+                        cashflow
+                        .loc["Operating Cash Flow"]
+                        .iloc[0]
+                    )
+
+                    capex = (
+                        cashflow
+                        .loc["Capital Expenditure"]
+                        .iloc[0]
+                    )
+
+                    free_cash_flow = (
+                        ocf - abs(capex)
+                    )
+
+                # ------------------------------
+                # Working Capital
+                # ------------------------------
+
+                if (
+                    "Current Assets"
+                    in balance_sheet.index
+                    and
+                    "Current Liabilities"
+                    in balance_sheet.index
+                ):
+
+                    current_assets = (
+                        balance_sheet
+                        .loc["Current Assets"]
+                        .iloc[0]
+                    )
+
+                    current_liabilities = (
+                        balance_sheet
+                        .loc["Current Liabilities"]
+                        .iloc[0]
+                    )
+
+                    working_capital = (
+                        current_assets
+                        - current_liabilities
+                    )
+
+                # ------------------------------
+                # Store metrics
+                # ------------------------------
+
                 df.at[index, "Revenue"] = revenue
+
                 df.at[index, "Net Income"] = net_income
+
                 df.at[index, "EBITDA"] = ebitda
+
+                df.at[index, "Working Capital"] = (
+                    working_capital
+                )
+
+                df.at[index, "Operating Cash Flow"] = (
+                    operating_cash_flow
+                )
+
+                df.at[index, "Free Cash Flow"] = (
+                    free_cash_flow
+                )
 
                 print(f"Processed {ticker}")
 
             except Exception as e:
 
-                print(f"Could not process {ticker}: {e}")
+                print(
+                    f"Could not process "
+                    f"{ticker}: {e}"
+                )
 
         print("\nFinancial dataset loaded.\n")
+
+        # ----------------------------------
+        # Save enriched dataset
+        # ----------------------------------
+
+        df.to_csv(
+            "financial_dataset.csv",
+            index=False
+        )
 
         # ----------------------------------
         # User inputs
         # ----------------------------------
 
-        name = input("Enter company name: ").strip()
-
-        industry = input(
-            "Enter GICS Sector exactly as shown: "
+        name = input(
+            "Enter company name: "
         ).strip()
 
-        if industry not in df["GICS Sector"].unique():
+        industry = input(
+            "Enter GICS Sector exactly "
+            "as shown in dataset: "
+        ).strip()
+
+        if (
+            industry
+            not in df["GICS Sector"].unique()
+        ):
 
             print("Industry sector not found.")
+
             return
 
-        company = CompanyProfMetrics(name, industry)
+        company = CompanyProfMetrics(
+            name,
+            industry
+        )
 
-        revenue = self.get_float("Enter Revenue: ")
-        cogs = self.get_float("Enter COGS: ")
-        sga = self.get_float("Enter SG&A: ")
-        marketing = self.get_float("Enter Marketing: ")
-        rd = self.get_float("Enter R&D: ")
+        # ----------------------------------
+        # Profitability inputs
+        # ----------------------------------
+
+        revenue = self.get_float(
+            "Enter Net Revenue: "
+        )
+
+        cogs = self.get_float(
+            "Enter COGS: "
+        )
+
+        sga = self.get_float(
+            "Enter SG&A: "
+        )
+
+        marketing = self.get_float(
+            "Enter Marketing: "
+        )
+
+        rd = self.get_float(
+            "Enter R&D: "
+        )
 
         company.set_financials(
             revenue,
@@ -431,11 +675,14 @@ Welcome to the Company Performance Analysis Engine.
         )
 
         # ----------------------------------
-        # Peer dataset
+        # Industry peer dataset
         # ----------------------------------
 
         peers_df = (
-            df[df["GICS Sector"] == industry]
+            df[
+                df["GICS Sector"]
+                == industry
+            ]
         )
 
         # ----------------------------------
@@ -444,7 +691,8 @@ Welcome to the Company Performance Analysis Engine.
 
         avg_margin = (
             (
-                peers_df["Net Income"] /
+                peers_df["Net Income"]
+                /
                 peers_df["Revenue"]
             )
             .dropna()
@@ -463,14 +711,21 @@ Welcome to the Company Performance Analysis Engine.
             .mean()
         )
 
+        avg_fcf = (
+            peers_df["Free Cash Flow"]
+            .dropna()
+            .mean()
+        )
+
         # ----------------------------------
-        # Decision-tree context
+        # Decision tree context
         # ----------------------------------
 
         context = {
 
             "company_margin":
-                company.net_income / company.revenue,
+                company.net_income
+                / company.revenue,
 
             "industry_margin":
                 avg_margin,
@@ -489,7 +744,7 @@ Welcome to the Company Performance Analysis Engine.
         }
 
         # ----------------------------------
-        # Classification
+        # Decision tree
         # ----------------------------------
 
         tree = self.build_profitability_tree()
@@ -503,7 +758,7 @@ Welcome to the Company Performance Analysis Engine.
 
         print(company.summary())
 
-        print("\nClassification:")
+        print("\nProfitability Classification:")
 
         print(
             self.explain_classification(
@@ -524,11 +779,12 @@ Welcome to the Company Performance Analysis Engine.
 
         print(
             f"Rank {ranking1['rank']} "
-            f"out of {ranking1['total']}"
+            f"out of {ranking1['total']} "
+            f"companies in {industry}."
         )
 
         # ----------------------------------
-        # Net Income ranking
+        # Net income ranking
         # ----------------------------------
 
         ranking2 = self.rank_by_netIncome(
@@ -540,7 +796,8 @@ Welcome to the Company Performance Analysis Engine.
 
         print(
             f"Rank {ranking2['rank']} "
-            f"out of {ranking2['total']}"
+            f"out of {ranking2['total']} "
+            f"companies in {industry}."
         )
 
         # ----------------------------------
@@ -556,22 +813,58 @@ Welcome to the Company Performance Analysis Engine.
 
         print(
             f"Rank {ranking3['rank']} "
-            f"out of {ranking3['total']}"
+            f"out of {ranking3['total']} "
+            f"companies in {industry}."
         )
 
         # ----------------------------------
-        # Graph visualization
+        # Cash flow analysis
         # ----------------------------------
 
-        graph_choice = input(
-            "\nShow industry graph? (yes/no): "
-        ).lower()
+        print("""
+Now the program will evaluate
+cash flow metrics.
+""")
 
-        if graph_choice == "yes":
+        cash = CompanyCashFlowMetrics(
+            company.net_income
+        )
 
-            self.graph_industry_metrics(
-                peers_df
-            )
+        current_assets = self.get_float(
+            "Enter Current Assets: "
+        )
+
+        liabilities = self.get_float(
+            "Enter Current Liabilities: "
+        )
+
+        non_cash = self.get_float(
+            "Enter Non-Cash Expenses: "
+        )
+
+        change_wc = self.get_float(
+            "Enter Change in Working Capital: "
+        )
+
+        capex = self.get_float(
+            "Enter Capital Expenditures: "
+        )
+
+        cash.set_financials(
+            current_assets,
+            liabilities,
+            non_cash,
+            change_wc,
+            capex
+        )
+
+        cash_ctx = cash.get_context()
+
+        self.explain_cash_flow(
+            cash_ctx,
+            revenue,
+            avg_fcf
+        )
 
 
 if __name__ == "__main__":
