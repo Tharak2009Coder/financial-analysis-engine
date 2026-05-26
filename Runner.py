@@ -596,7 +596,7 @@ This tool evaluates:
         # ----------------------------------
 
         df.to_csv(
-            "financial_dataset.csv",
+            "sample_data.csv",
             index=False
         )
 
