@@ -6,7 +6,7 @@ import pandas as pd
 import yfinance as yf
 
 
-class CompanyRunner:
+class Runner:
 
     # ----------------------------------
     # Utility: safe numeric input
