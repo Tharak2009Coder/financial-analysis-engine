@@ -361,31 +361,36 @@ class Runner:
     ):
 
         explanations = {
-
             "Industry Leader":
-                "The company demonstrates strong "
-                "operational efficiency and "
-                "competitive scale relative to "
-                "industry peers.",
+                "The company demonstrates strong revenue scale, "
+                "profitability, and operational efficiency relative "
+                "to industry peers. Its financial positioning suggests "
+                "competitive advantages, efficient cost management, "
+                "and strong earnings potential.",
 
             "Efficient but Under-Scaled":
-                "The company maintains healthy "
-                "profitability margins but operates "
-                "at a smaller revenue scale.",
+                "The company maintains healthy profitability and "
+                "operational discipline but operates at a smaller "
+                "revenue scale compared to larger industry competitors. "
+                "This may indicate future growth potential if scale expands.",
 
             "Margin Strong but Operationally Weak":
-                "The company reports healthy margins "
-                "but weaker EBITDA performance "
-                "relative to peers.",
+                "The company reports solid profitability margins but "
+                "weaker EBITDA performance relative to peers, suggesting "
+                "that operational cash generation and core operating "
+                "efficiency may require improvement.",
 
             "Scale Without Efficiency":
-                "The company generates significant "
-                "revenue but exhibits weaker "
-                "profitability efficiency.",
+                "The company generates significant revenue relative "
+                "to competitors but exhibits weaker profitability "
+                "and operational efficiency. This may indicate margin "
+                "pressure, elevated costs, or inefficient resource allocation.",
 
             "Underperformer":
-                "The company trails peers in both "
-                "profitability and scale."
+                "The company trails industry peers across revenue, "
+                "profitability, and operational performance metrics. "
+                "This may reflect weaker market positioning, limited "
+                "scale advantages, or operational inefficiencies."
         }
 
         return explanations[label]
@@ -394,22 +399,11 @@ class Runner:
     # Main workflow
     # ----------------------------------
     def run(self):
-
-        print("""
-Welcome to the Company Performance Analysis Engine.
-
-This tool evaluates:
-• Profitability
-• Peer benchmarking
-• Ranking systems
-• Decision-tree logic
-""")
-
         # ----------------------------------
         # Load dataset
         # ----------------------------------
 
-        df = pd.read_csv("sample_data.csv")
+        df = pd.read_csv("financial_dataset.csv")
 
         df = df.sort_values(by="GICS Sector")
 
@@ -596,17 +590,30 @@ This tool evaluates:
         # ----------------------------------
 
         df.to_csv(
-            "sample_data.csv",
+            "financial_dataset.csv",
             index=False
         )
 
         # ----------------------------------
         # User inputs
         # ----------------------------------
+        print("""
+Welcome to the Company Performance Analysis Engine.
 
+This tool evaluates:
+• Profitability
+• Peer benchmarking
+• Ranking systems
+• Decision-tree logic
+""")
         name = input(
             "Enter company name: "
         ).strip()
+
+        print("\nAvailable GICS Sectors:\n")
+
+        for sector in sorted(df["GICS Sector"].unique()):
+            print(f"- {sector}")
 
         industry = input(
             "Enter GICS Sector exactly "
@@ -777,11 +784,29 @@ This tool evaluates:
 
         print("\nRevenue Ranking:")
 
-        print(
-            f"Rank {ranking1['rank']} "
-            f"out of {ranking1['total']} "
-            f"companies in {industry}."
-        )
+        if ranking1["left_peer"] is not None:
+
+            print(
+                f"\nClosest company with LOWER revenue:"
+                f" {ranking1['left_peer']['Security']}"
+            )
+
+            print(
+                f"Revenue: "
+                f"{ranking1['left_peer']['Revenue']}"
+            )
+
+        if ranking1["right_peer"] is not None:
+
+            print(
+                f"\nClosest company with HIGHER revenue:"
+                f" {ranking1['right_peer']['Security']}"
+            )
+
+            print(
+                f"Revenue: "
+                f"{ranking1['right_peer']['Revenue']}"
+            )
 
         # ----------------------------------
         # Net income ranking
@@ -794,11 +819,29 @@ This tool evaluates:
 
         print("\nNet Income Ranking:")
 
-        print(
-            f"Rank {ranking2['rank']} "
-            f"out of {ranking2['total']} "
-            f"companies in {industry}."
-        )
+        if ranking2["left_peer"] is not None:
+
+            print(
+                f"\nClosest company with LOWER Net Income:"
+                f" {ranking2['left_peer']['Security']}"
+            )
+
+            print(
+                f"Net Income: "
+                f"{ranking2['left_peer']['Net Income']}"
+            )
+
+        if ranking2["right_peer"] is not None:
+
+            print(
+                f"\nClosest company with HIGHER Net Income:"
+                f" {ranking2['right_peer']['Security']}"
+            )
+
+            print(
+                f"Net Income: "
+                f"{ranking2['right_peer']['Net Income']}"
+            )
 
         # ----------------------------------
         # EBITDA ranking
@@ -811,11 +854,29 @@ This tool evaluates:
 
         print("\nEBITDA Ranking:")
 
-        print(
-            f"Rank {ranking3['rank']} "
-            f"out of {ranking3['total']} "
-            f"companies in {industry}."
-        )
+        if ranking3["left_peer"] is not None:
+
+            print(
+                f"\nClosest company with LOWER EBITDA:"
+                f" {ranking3['left_peer']['Security']}"
+            )
+
+            print(
+                f"EBITDA: "
+                f"{ranking3['left_peer']['EBITDA']}"
+            )
+
+        if ranking3["right_peer"] is not None:
+
+            print(
+                f"\nClosest company with HIGHER EBITDA:"
+                f" {ranking1['right_peer']['Security']}"
+            )
+
+            print(
+                f"EBITDA: "
+                f"{ranking1['right_peer']['EBITDA']}"
+            )
 
         # ----------------------------------
         # Cash flow analysis
@@ -869,5 +930,4 @@ cash flow metrics.
 
 if __name__ == "__main__":
 
-    CompanyRunner().run()
-    
+    Runner().run()
