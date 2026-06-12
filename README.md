@@ -4,7 +4,7 @@
 
 The Financial Performance Analysis Engine is a Python-based financial benchmarking and analytics system designed to evaluate company performance relative to industry peers.
 
-The project dynamically retrieves financial statement data using the Yahoo Finance API (`yfinance`) and performs profitability, operational, and cash-flow analysis using metrics such as:
+The project dynamically retrieves financial statement data using the Yahoo Finance API (`yfinance`) and performs profitability, operational, and cash-flow analysis by calculating metrics such as:
 
 - Revenue
 - Net Income
@@ -20,8 +20,6 @@ In addition, the system applies decision-tree logic to classify companies into p
 - Efficient but Under-Scaled
 - Scale Without Efficiency
 - Underperformer
-
-The project also includes graphical visualization of financial metrics for competitive analysis and industry benchmarking.
 
 ---
 
@@ -45,4 +43,3 @@ The project also includes graphical visualization of financial metrics for compe
 - Python
 - pandas
 - yfinance
-- matplotlib
