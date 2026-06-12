@@ -14,6 +14,14 @@ The project dynamically retrieves financial statement data using the Yahoo Finan
 
 The engine groups companies by GICS sector, compares user-entered company data against industry benchmarks, and generates rankings using binary-search positioning algorithms.
 
+Based on a company's profitability performance, the system evaluates key financial metrics through a decision-tree classification model and categorizes companies into one of the following performance groups:
+
+Industry Leader
+Efficient but Under-Scaled
+Margin Strong but Operationally Weak
+Scale Without Efficiency
+Underperformer
+
 ---
 
 ## Features
