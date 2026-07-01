@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Performance Analysis Engine</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Analysis Results for {{ result.company }}</h1>
+
+<h2>Company Summary</h2>
+<pre>{{ result["summary"] }}</pre>
+<p>Industry: {{ result.industry }}</p>
+
+<h2>Classification</h2>
+<pre>{{ result["classification"] }}</pre>
+
+
+<h2>{{ result.revenue.title}}</h2>
+<p>{{ result.revenue.rank}}</p>
+<p>{{ result.revenue.explanation }}</p>
+<h4>{{ result.revenue.lpTitle}}</h4>
+<p>{{ result.revenue.lpRevenue}}</p>
+<h4>{{ result.revenue.rpTitle }}</h4>
+<p>{{ result.revenue.rpRevenue }}</p>
+
+<h2>{{ result.net_income.title}}</h2>
+<p>{{ result.net_income.rank }}</p>
+<p>{{ result.net_income.explanation }}</p>
+<h4>{{ result.net_income.lpTitle}}</h4>
+<p>{{ result.net_income.lpNetIncome}}</p>
+<h4>{{ result.net_income.rpTitle }}</h4>
+<p>{{ result.net_income.rpNetIncome }}</p>
+
+<h2>{{ result.ebitda.title}}</h2>
+<p>{{ result.ebitda.rank }}</p>
+<p>{{ result.ebitda.explanation }}</p>
+<h4>{{ result.ebitda.lpTitle}}</h4>
+<p>{{ result.ebitda.lpEBITDA}}</p>
+<h4>{{ result.ebitda.rpTitle }}</h4>
+<p>{{ result.ebitda.rpEBITDA }}</p>
+
+<h2>Cash Flow Analysis</h2>
+<pre>{{result.cash_context}}</pre>
+
+<h2>Recommendations</h2>
+
+<ul>
+    {% for recommendation in result.recommendations %}
+        <li>{{ recommendation }}</li>
+    {% endfor %}
+</ul>

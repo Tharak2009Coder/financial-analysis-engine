@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Analysis</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Financial Performance Analysis</h1>
+
+    <form action="/analysis" method="POST">
+
+        <h2>Company Information</h2>
+
+        <input
+            type="text"
+            name="company_name"
+            placeholder="Company Name"
+            required
+        >
+
+        <input
+            type="text"
+            name="industry"
+            placeholder="GICS Sector"
+            required
+        >
+
+        <h2>Profitability Metrics</h2>
+
+        <input
+            type="number"
+            step="any"
+            name="revenue"
+            placeholder="Revenue"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="cogs"
+            placeholder="COGS"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="sga"
+            placeholder="SG&A"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="marketing"
+            placeholder="Marketing Expense"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="rd"
+            placeholder="R&D Expense"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="depreciation"
+            placeholder="Depreciation"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="amortization"
+            placeholder="Amortization"
+            required
+        >
+
+        <h2>Cash Flow Metrics</h2>
+
+        <input
+            type="number"
+            step="any"
+            name="current_assets"
+            placeholder="Current Assets"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="current_liabilities"
+            placeholder="Current Liabilities"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="non_cash"
+            placeholder="Non-Cash Expenses"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="change_wc"
+            placeholder="Change in Working Capital"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="capex"
+            placeholder="Capital Expenditures"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Analyze Financial Performance
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

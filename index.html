@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Performance Analysis Engine</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Financial Performance Analysis Engine</h1>
+
+        <p class="subtitle">
+            Evaluate your company's profitability, operational efficiency,
+            cash flow performance, and competitive positioning against
+            industry peers.
+        </p>
+
+        <section class="feature-card fade-in">
+
+            <h2>How It Works</h2>
+
+            <p>
+                This platform evaluates your organization's financial performance by
+                comparing its profitability, operational efficiency, and cash flow
+                against industry peers within the S&amp;P 500. Using financial
+                statement analysis and benchmarking techniques, the engine identifies
+                your company's relative strengths and potential areas for improvement.
+            </p>
+
+            <p>
+                Before beginning the analysis, please have your organization's
+                financial statements readily available. Most of the required inputs
+                can be obtained directly from your annual report or audited financial
+                statements, including:
+            </p>
+
+            <ul>
+
+                <li>Income Statement (Revenue, COGS, SG&amp;A, Marketing, R&amp;D, Net Income)</li>
+
+                <li>Balance Sheet (Current Assets and Current Liabilities)</li>
+
+                <li>Statement of Cash Flows (Capital Expenditures, Non-Cash Expenses, Operating Cash Flow components)</li>
+
+                <li>Supporting accounting information such as Depreciation and Amortization</li>
+
+            </ul>
+
+            <p>
+                Once submitted, your organization's financial metrics are benchmarked
+                against companies within the same GICS industry sector to generate a
+                comprehensive financial performance assessment.
+            </p>
+
+        </section>
+
+        <section class="feature-card fade-in">
+
+            <h2>Metrics Evaluated</h2>
+
+            <ul>
+
+                <li>Revenue</li>
+
+                <li>Net Income</li>
+
+                <li>Net Income Margin</li>
+
+                <li>EBITDA</li>
+
+                <li>Working Capital</li>
+
+                <li>Operating Cash Flow</li>
+
+                <li>Free Cash Flow</li>
+
+            </ul>
+
+        </section>
+
+        <section class="feature-card fade-in">
+
+            <h2>Analysis Features</h2>
+
+            <ul>
+
+                <li>
+                    <strong>Industry Benchmarking</strong><br>
+                    Compare your organization's financial performance against industry
+                    averages derived from companies within the S&amp;P 500.
+                </li>
+
+                <br>
+
+                <li>
+                    <strong>Financial Metric Rankings</strong><br>
+                    Rank profitability metrics and cash-flow metrics relative to peer organizations
+                    while identifying neighboring competitors with higher and lower
+                    financial performance.
+                </li>
+
+                <br>
+
+                <li>
+                    <strong>Decision Tree Classification</strong><br>
+                    Utilize a custom-built decision tree to classify the organization as
+                    <em>Industry Leader</em>, <em>Efficient but Under-Scaled</em>,
+                    <em>Margin Strong but Operationally Weak</em>,
+                    <em>Scale Without Efficiency</em>, or
+                    <em>Underperformer</em>.
+                </li>
+
+                <br>
+
+                <li>
+                    <strong>Strategic Recommendations</strong><br>
+                    Generate tailored financial recommendations based upon the
+                    organization's rankings, profitability profile, cash flow
+                    performance, and overall competitive position within its industry.
+                </li>
+
+            </ul>
+
+        </section>
+
+        <section class="feature-card fade-in">
+
+            <h2>Classification Categories</h2>
+
+            <div class="classification">
+
+                <h3>Industry Leader</h3>
+                <p>
+                    Strong revenue scale, profitability,
+                    and operational efficiency.
+                </p>
+
+                <h3>Efficient but Under-Scaled</h3>
+                <p>
+                    Strong profitability but smaller
+                    market scale than competitors.
+                </p>
+
+                <h3>Margin Strong but Operationally Weak</h3>
+                <p>
+                    Healthy margins but weaker operating
+                    performance relative to peers.
+                </p>
+
+                <h3>Scale Without Efficiency</h3>
+                <p>
+                    Strong revenue generation but lower
+                    profitability and efficiency.
+                </p>
+
+                <h3>Underperformer</h3>
+                <p>
+                    Trails industry peers across
+                    multiple financial metrics.
+                </p>
+
+            </div>
+
+        </section>
+
+        <div class="button-container">
+            <form action="/analysis" method="GET">
+                <button type="submit">
+
+                <hover></hover>
+                Begin Financial Analysis
+
+                </button>
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+    <script>
+
+    const observer = new IntersectionObserver(
+
+    entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("show");
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold: 0.15
+        }
+
+);
+
+document.querySelectorAll(".fade-in")
+    .forEach(element => {
+
+        observer.observe(element);
+
+    });
+
+</script>
+
+</body>
+
+</html>
+
