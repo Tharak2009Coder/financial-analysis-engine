@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Analysis</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="button-container">
+        <form action="/" method="GET">
+            <button type="submit" style="position: fixed; top: 0px; left: 0px;">
+
+            <hover></hover>
+            Go Back to Home
+
+            </button>
+        </form>
+    </div>
+
+    <h1>Financial Performance Analysis</h1>
+
+    <form action="/analysis" method="POST">
+
+        <h2>Company Information</h2>
+
+        <input
+            type="text"
+            name="company_name"
+            placeholder="Company Name"
+            value ="{{inputs.name}}"
+            required
+        >
+
+        <select name="industry" id="industry" required>
+
+            <option value="" disabled selected>
+                Select Your Industry
+            </option>
+
+            <option
+                value="Information Technology"
+                {% if inputs and inputs["industry"] == "Information Technology" %}
+                    selected
+                {% endif %}
+            >       
+            Information Technology
+            </option>
+
+            <option
+                value="Industrials"
+                {% if inputs and inputs["industry"] == "Industrials" %}
+                    selected
+                {% endif %}
+            >
+            Industrials
+            </option>
+
+            <option
+                value="Financials"
+                {% if inputs and inputs["industry"] == "Financials" %}
+                    selected
+                {% endif %}
+            >
+                Financials
+            </option>
+
+            <option
+                value="Health Care"
+                {% if inputs and inputs["industry"] == "Health Care" %}
+                    selected
+                {% endif %}
+            >
+                Health Care
+            </option>
+
+            <option
+                value="Consumer Discretionary"
+                {% if inputs and inputs["industry"] == "Consumer Discretionary" %}
+                    selected
+                {% endif %}
+            >
+                Consumer Discretionary
+            </option>
+
+            <option
+                value="Consumer Staples"
+                {% if inputs and inputs["industry"] == "Consumer Staples" %}
+                    selected
+                {% endif %}
+            >
+                Consumer Staples
+            </option>
+
+            <option
+                value="Communication Services"
+                {% if inputs and inputs["industry"] == "Communication Services" %}
+                    selected
+                {% endif %}
+            >
+                Communication Services
+            </option>
+
+            <option
+                value="Materials"
+                {% if inputs and inputs["industry"] == "Materials" %}
+                    selected
+                {% endif %}
+            >
+                Materials
+            </option>
+
+            <option
+                value="Utilities"
+                {% if inputs and inputs["industry"] == "Utilities" %}
+                    selected
+                {% endif %}
+            >
+                Utilities
+            </option>
+
+            <option
+                value="Energy"
+                {% if inputs and inputs["industry"] == "Energy" %}
+                    selected
+                {% endif %}
+            >
+                Energy
+            </option>
+
+            <option
+                value="Real Estate"
+                {% if inputs and inputs["industry"] == "Real Estate" %}
+                    selected
+                {% endif %}
+            >
+                Real Estate
+            </option>
+
+        </select>
+
+        <h2>Profitability Metrics</h2>
+        
+        <input
+            type="number"
+            step="any"
+            name="revenue"
+            placeholder="Revenue"
+            value="{{inputs.revenue}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="cogs"
+            placeholder="COGS"
+            value="{{inputs.cogs}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="sga"
+            placeholder="SG&A"
+            value="{{inputs.sga}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="marketing"
+            placeholder="Marketing Expense"
+            value="{{inputs.marketing}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="rd"
+            placeholder="R&D Expense"
+            value="{{inputs.rd}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="depreciation"
+            placeholder="Depreciation"
+            value="{{inputs.depreciation}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="amortization"
+            placeholder="Amortization"
+            value="{{inputs.amortization}}"
+            required
+        >
+
+        <h2>Cash Flow Metrics</h2>
+
+        <input
+            type="number"
+            step="any"
+            name="current_assets"
+            placeholder="Current Assets"
+            value="{{inputs.current_assets}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="current_liabilities"
+            placeholder="Current Liabilities"
+            value="{{inputs.liabilities}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="non_cash"
+            placeholder="Non-Cash Expenses"
+            value="{{inputs.non_cash}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="change_wc"
+            placeholder="Change in Working Capital"
+            value="{{inputs.change_wc}}"
+            required
+        >
+
+        <input
+            type="number"
+            step="any"
+            name="capex"
+            placeholder="Capital Expenditures"
+            value="{{inputs.capex}}"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Analyze Financial Performance
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

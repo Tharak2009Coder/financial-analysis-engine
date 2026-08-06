@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Performance Analysis Engine</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+    
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+
+        <li>
+            <a href="/analysis">
+                Edit Your Metrics
+            </a>
+        </li>
+
+
+        <li><a href="/results">Your Results</a></li>
+
+        <li>
+            <a href="{{ url_for('new_analysis') }}">
+                Begin New Analysis
+            </a>
+        </li>
+    </ul>
+    </nav>
+<div class="container">
+
+    <!-- Hero Banner -->
+    <div class="hero" id="top">
+
+        <h1>Financial Performance Report</h1>
+
+        <h3>{{ result.company }}</h3>
+
+        <p>{{ result.industry }} Sector</p>
+
+        <span class="status">
+            ✓ Analysis Successfully Completed
+        </span>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="dashboard-nav">
+
+        <a href="#summary">Company Summary</a>
+
+        <a href="#classification">Classification</a>
+
+        <a href="#revenue">Revenue</a>
+
+        <a href="#income">Net Income</a>
+
+        <a href="#ebitda">EBITDA</a>
+
+        <a href="#cashflow">Cash Flow</a>
+
+        <a href="#recommendations">Recommendations</a>
+        
+
+    </div>
+
+
+    <!-- Company Summary -->
+
+    <section class="feature-card fade-in" id="summary">
+
+        <h2>📊 Company Summary</h2>
+
+        <ul>
+
+        {% for item in result.summary %}
+
+            <li>{{ item }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+
+
+    <!-- Classification -->
+
+    <section class="feature-card fade-in" id="classification">
+
+        <h2>🧠 Decision Tree Classification</h2>
+
+        <div class="classification-box">
+
+            {{ result.classification }}
+
+        </div>
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+
+
+    <!-- Revenue -->
+
+    <section class="feature-card fade-in" id="revenue">
+
+        <h2>{{ result.revenue.title }}</h2>
+
+        <p>{{ result.revenue.rank }}</p>
+
+        <p>{{ result.revenue.explanation }}</p>
+
+        <hr>
+
+        <h4>{{ result.revenue.lpTitle }}</h4>
+
+        <p>{{ result.revenue.lpRevenue }}</p>
+
+        <h4>{{ result.revenue.rpTitle }}</h4>
+
+        <p>{{ result.revenue.rpRevenue }}</p>
+
+        <a href="{{ url_for('revenue') }}">View Revenue Details</a>
+
+        <img src="{{ url_for('static',
+                     filename='revenue_ranking.png') }}" width="500" position="bottom; fixed">
+        
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+
+
+    <!-- Net Income -->
+
+    <section class="feature-card fade-in" id="income">
+
+        <h2>{{ result.net_income.title }}</h2>
+
+        <p>{{ result.net_income.rank }}</p>
+
+        <p>{{ result.net_income.explanation }}</p>
+
+        <hr>
+
+        <h4>{{ result.net_income.lpTitle }}</h4>
+
+        <p>{{ result.net_income.lpNetIncome }}</p>
+
+        <h4>{{ result.net_income.rpTitle }}</h4>
+
+        <p>{{ result.net_income.rpNetIncome }}</p>
+
+        <img src="{{ url_for('static',
+                     filename='net_income_ranking.png') }}" width="500" position="bottom; fixed">
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+        
+
+    </section>
+
+
+    <!-- EBITDA -->
+
+    <section class="feature-card fade-in" id="ebitda">
+
+        <h2>{{ result.ebitda.title }}</h2>
+
+        <p>{{ result.ebitda.rank }}</p>
+
+        <p>{{ result.ebitda.explanation }}</p>
+
+        <hr>
+
+        <h4>{{ result.ebitda.lpTitle }}</h4>
+
+        <p>{{ result.ebitda.lpEBITDA }}</p>
+
+        <h4>{{ result.ebitda.rpTitle }}</h4>
+
+        <p>{{ result.ebitda.rpEBITDA }}</p>
+
+        <img src="{{ url_for('static',
+                     filename='ebitda_ranking.png') }}" width="500" position="bottom; fixed">
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+
+    <section class="feature-card fade-in" id="cashmetrics">
+
+        <h2>Cash Flow Metrics</h2>
+
+        <p><strong>Working Capital:</strong>
+            ${{ "{:,.0f}".format(result.cash_metrics.working_capital) }}
+        </p>
+
+        <p><strong>Operating Cash Flow:</strong>
+            ${{ "{:,.0f}".format(result.cash_metrics.operating_cash_flow) }}
+        </p>
+
+        <p><strong>Free Cash Flow:</strong>
+            ${{ "{:,.0f}".format(result.cash_metrics.free_cash_flow) }}
+        </p>
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+    <section class="feature-card fade-in" id="cashflow">
+
+        <h2>Cash Flow Analysis</h2>
+
+        <p>{{ result.cash_ctx }}</p>
+
+        <ul>
+
+            {% for explanation in result.cash_flow_analyzer %}
+
+                <li>{{ explanation }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+
+    </section>
+    
+    <section class="feature-card fade-in" id="recommendations">
+
+        <h2>Recommendations</h2>
+
+        <ul>
+            {% for recommendation in result.recommendations %}
+                <li>{{ recommendation }}</li>
+            {% endfor %}
+        </ul>
+        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+    </section>
