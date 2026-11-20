@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Analyzer | About Us</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#f7f4ec, #15181d);
+    --surface: light-dark(#fbfaf6, #1d2229);
+    --text: light-dark(#222222, #f2f2ef);
+    --muted: light-dark(#707070, #b7b9bd);
+    --blue: light-dark(#0757b8, #65a3ff);
+    --orange: light-dark(#ff8749, #ff9b62);
+    --cta: light-dark(#f04a35, #ff654e);
+    --border: light-dark(#d9d5cc, #3b414a);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Trebuchet MS", Arial, sans-serif;
+  }
+  .app {
+    min-height: 100vh;
+    background: var(--bg);
+  }
+  header {
+    width: min(1180px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 30px 0 18px;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-left,
+  .nav-middle,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 17px;
+    transition: opacity 160ms ease, color 160ms ease;
+  }
+  nav a:hover { opacity: .62; }
+  nav a.active { color: var(--orange); }
+
+  main {
+    width: min(1120px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 68px 0 72px;
+  }
+  h1 {
+    margin: 0;
+    text-align: center;
+    color: var(--orange);
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size: clamp(56px, 8vw, 92px);
+    font-weight: 400;
+    letter-spacing: .5px;
+    line-height: .95;
+  }
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(270px, .72fr);
+    gap: 72px;
+    margin-top: 34px;
+    align-items: start;
+  }
+  .section-title {
+    color: var(--orange);
+    font-size: 27px;
+    font-weight: 900;
+    margin: 0 0 28px;
+  }
+  .copy {
+    font-size: 22px;
+    line-height: 1.45;
+    margin: 0;
+  }
+  .lead { margin-bottom: 30px; }
+  .arrow {
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  ul, ol { margin: 6px 0 0 26px; padding-left: 18px; }
+  li { padding-left: 3px; margin: 5px 0; }
+  .needs { margin-top: 26px; }
+  .metrics {
+    padding-top: 86px;
+  }
+  .metrics .section-title { text-align: left; }
+  .metrics ol { margin-left: 28px; }
+  .metrics li { margin: 6px 0; }
+  .classification {
+    margin-top: 36px;
+  }
+  .classification-list {
+    margin-top: 8px;
+    font-size: 21px;
+    line-height: 1.42;
+  }
+  .classification-list > li { margin: 6px 0 8px; }
+  .classification-list strong { color: #004AAD; }
+  .classification-list ul { list-style: circle; margin-top: 2px; }
+  .classification-list ul li { margin: 2px 0; }
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 58px;
+    gap: 28px;
+  }
+  .pill {
+    border: 0;
+    border-radius: 999px;
+    min-width: 158px;
+    padding: 11px 28px;
+    color: white;
+    background: linear-gradient(#3b68ad, #174886);
+    box-shadow: 0 4px 7px rgba(0,0,0,.2);
+    font: 800 20px "Trebuchet MS", Arial, sans-serif;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .pill:hover { transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,.23); }
+  .note {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    background: #4d4d4d;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    transition: .2s ease;
+  }
+  .note.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (max-width: 780px) {
+    header { width: min(100% - 30px, 1180px); }
+    nav { align-items: flex-start; gap: 18px; }
+    .nav-left, .nav-right { gap: 18px; flex-wrap: wrap; }
+    nav a { font-size: 15px; }
+    main { padding-top: 42px; }
+    .intro { grid-template-columns: 1fr; gap: 28px; }
+    .metrics { padding-top: 0; }
+    .metrics .section-title { text-align: left; }
+    .copy, .classification-list { font-size: 18px; }
+    .section-title { font-size: 24px; }
+    .actions { margin-top: 40px; }
+  }
+  @media (max-width: 480px) {
+    header { width: min(100% - 30px, 1180px); }
+    nav { flex-direction: column; }
+    .nav-left, .nav-right { gap: 14px 20px; }
+    main { width: min(100% - 30px, 1120px); }
+    h1 { font-size: 52px; }
+    .actions { flex-direction: column; align-items: stretch; }
+    .pill { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <nav aria-label="Primary navigation">
+      <div class="nav-left">
+        <a class="active" href="{{ url_for('about') }}" aria-current="page">About Us</a>
+      </div>
+      <div class="nav-middle">
+        <a href="{{ url_for('home') }}#">Home</a>
+      </div>
+      <div class="nav-right">
+        <a href="{{ url_for('results') }}">Results</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Learn About Us</h1>
+
+    <section class="intro" aria-label="How Finance Analyzer works">
+      <div>
+        <h2 class="section-title">How It Works</h2>
+        <div class="copy">
+          <p class="lead"><span class="arrow">→</span>Evaluate Your Organization’s Financial Performance</p>
+          <ul>
+            <li>Compare profitability, operational efficiency and cash flow against S&amp;P 500 industry peers</li>
+          </ul>
+
+          <div class="needs">
+            <p><span class="arrow">→</span>Have available:</p>
+            <ol>
+              <li>Income Statement</li>
+              <li>Balance Sheet</li>
+              <li>Statement of Cash Flows</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="classification" aria-label="Classification categories">
+      <h2 class="section-title">Classification Categories:</h2>
+      <ol class="classification-list">
+        <li><strong>Industry Leader</strong>
+          <ul><li>Strong revenue scale, profitability, and operational efficiency</li></ul>
+        </li>
+        <li><strong>Efficient but Under-Scaled</strong>
+          <ul><li>Strong profitability but smaller market scale than competitors.</li></ul>
+        </li>
+        <li><strong>Margin Strong but Operational Weak</strong>
+          <ul><li>Healthy margins but weaker operating performance relative to peers</li></ul>
+        </li>
+        <li><strong>Scale Without Efficiency</strong>
+          <ul><li>Strong revenue generation but lower profitability and efficiency.</li></ul>
+        </li>
+        <li><strong>Underperformer</strong>
+          <ul><li>Trails industry peers across multiple financial metrics.</li></ul>
+        </li>
+      </ol>
+    </section>
+    <br>
+    <section>
+        <h2 class="section-title">Metrics Calculated:</h2>
+        <ol class="copy">
+          <ul>Gross Profit</ul>
+          <ul>Net Income</ul>
+          <ul>Net Income Margin</ul>
+          <ul>EBITDA</ul>
+          <ul>Operating Cash Flow</ul>
+          <ul>Free Cash Flow</ul>
+          <ul>Working Capital</ul>
+        </ol>
+    </section>
+    <br>
+    <section>
+        <h2 class="section-title">About the Developer</h2>
+        <div class="copy">
+          <p>I'm Tharak, the developer behind Finance Analyzer. 
+            <br><br>I built this platform to help startups evaluate their financial performance, benchmark their results against relevant competitors, and identify opportunities for strategic improvement.
+<br>This project brings together my interests in finance and computer science by translating financial statement data into comparative performance insights.
+<br><br>Have feedback or suggestions? I'd appreciate your thoughts on how Finance Analyzer can improve. Feel free to reach out through the contact links below.
+</p>
+        </div>
+    </section>
+
+    <div class="actions">
+      <button class="pill" type="button" data-action="email">Email</button>
+      <button class="pill" type="button" data-action="linkedin">LinkedIn</button>
+    </div>
+  </main>
+  <div class="note" id="note" role="status" aria-live="polite"></div>
+</div>
+<script>
+  const note = document.getElementById('note');
+  let timer;
+  document.querySelectorAll('[data-action]').forEach(button => {
+    button.addEventListener('click', () => {
+      const action = button.dataset.action;
+      note.textContent = action === 'email'
+        ? 'Email sharing can be connected here.'
+        : 'LinkedIn sharing can be connected here.';
+      note.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(() => note.classList.remove('show'), 2200);
+    });
+  });
+</script>
+</body>
+</html>

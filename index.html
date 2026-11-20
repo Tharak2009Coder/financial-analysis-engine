@@ -1,298 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Finance Analyzer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Analyzer | Home</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#f7f4ec, #15181d);
+      --surface: light-dark(#fbfaf6, #1d2229);
+      --text: light-dark(#222222, #f2f2ef);
+      --muted: light-dark(#707070, #b7b9bd);
+      --blue: light-dark(#0757b8, #65a3ff);
+      --orange: light-dark(#ff8749, #ff9b62);
+      --cta: light-dark(#f04a35, #ff654e);
+      --input: light-dark(#ffffff, #252b33);
+      --border: light-dark(#d9d5cc, #3b414a);
+      --shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+    }
 
-    <link rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}">
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .app {
+      min-height: 100vh;
+      background: var(--bg);
+    }
+
+    header {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 30px 0 18px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .nav-middle {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 17px;
+      transition: opacity 160ms ease;
+    }
+
+    nav a:hover { opacity: 0.62; }
+    nav a.active { color: var(--orange); }
+    main {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 68px 0 72px;
+    }
+
+    ul {
+        display: flex;       /* Aligns the list items horizontally */
+        gap: 30px;           /* Puts space between each item */
+        list-style-type: disc; /* Ensures the bullet points stay visible */
+        padding-left: 20px;  /* Leaves room for the very first bullet */
+        }
+
+    li {
+    display: list-item;  /* Keeps the native bullet point behavior */
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      color: var(--orange);
+      font-family: Impact, "Arial Narrow", sans-serif;
+      font-size: clamp(6px, 7vw, 92px);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      line-height: 0.98;
+    }
+
+    .tagline {
+      width: min(780px, 100%);
+      margin: 34px auto 0;
+      text-align: left;
+      color: darkslategray;
+      font-size: clamp(20px, 2.1vw, 27px);
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .tagline li { margin: 5px 0; padding-left: 6px; }
+
+    .form-section {
+      margin-top: 22px;
+      padding: 0 8px;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      margin: 0 0 18px;
+      color: var(--blue);
+      font-size: clamp(29px, 3vw, 42px);
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .fields {
+      display: grid;
+      gap: 18px 28px;
+    }
+
+    .fields.company {
+      grid-template-columns: minmax(230px, 1fr) minmax(230px, 1fr);
+      max-width: 720px;
+    }
+
+    .fields.profitability {
+      grid-template-columns: repeat(5, minmax(110px, 1fr));
+    }
+
+    .fields.cashflow {
+      grid-template-columns: repeat(5, minmax(110px, 1fr));
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 46px;
+      padding: 0 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+      background: var(--input);
+      color: var(--text);
+      font: inherit;
+      font-size: 16px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    input::placeholder { color: var(--muted); opacity: 0.72; }
+
+    input:focus,
+    select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 16%, transparent);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 42px;
+    }
+
+    .analyze {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 30px;
+      min-width: 184px;
+      background: var(--cta);
+      color: #fff;
+      font: inherit;
+      font-size: 22px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.16);
+      transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+    }
+
+    .analyze:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 11px 18px rgba(0, 0, 0, 0.18);
+      filter: brightness(1.03);
+    }
+
+    .analyze:active { transform: translateY(0); }
+
+    .helper {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      max-width: 360px;
+      padding: 15px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .fields.profitability,
+      .fields.cashflow {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      header,
+      main { width: min(100% - 30px, 560px); }
+
+      header { padding-top: 22px; }
+
+      .nav-left,
+      .nav-right { gap: 16px; }
+      nav a { font-size: 14px; }
+
+      main { padding-top: 45px; }
+
+      .hero h1 { font-size: clamp(47px, 14vw, 72px); }
+      .tagline { font-size: 18px; }
+
+      .fields.company,
+      .fields.profitability,
+      .fields.cashflow {
+        grid-template-columns: 1fr;
+      }
+
+      .actions { justify-content: stretch; }
+      .analyze { width: 100%; }
+      .helper { text-align: center; }
+    }
+  </style>
 </head>
 
 <body>
-
-    <nav class="navbar">
-    
-    <ul class="nav-links">
-
-    <li class="dropdown">
-
-        <a href="#">Home ▼</a>
-
-        <ul class="dropdown-menu">
-
-            <li><a href="#about">About</a></li>
-
-            <li><a href="#metrics">Metrics Evaluated</a></li>
-
-            <li><a href="#features">Features</a></li>
-
-            <li><a href="#classification">Classification</a></li>
-
-            <li><a href="#Begin New Analysis">Begin New Analysis</a></li>
-
-        </ul>
-
-    </li>
-
-
-    {% if has_results %}
-
-        <li>
-            <a href="/analysis">
-                Edit Your Metrics
-            </a>
-        </li>
-
-        <li>
-            <a href="/results">
-                Your Results
-            </a>
-        </li>
-
-        <li>
-            <a href="{{ url_for('new_analysis') }}">
-                Begin New Analysis
-            </a>
-        </li>
-
-    {% endif %}
-
-    </ul>
-    </nav>
-
-    <div class="container" id="home">
-
-        <h1 style="font-size: 54px">Welcome to Finance Analyzer!</h1>
-
-        <p class="subtitle">Benchmark your organization's financial health against S&P 500 industry peers using financial statement analysis, decision-tree classification, and automated strategic recommendations.</p>
+  <div class="app">
+    <header>
+      <nav aria-label="Primary navigation">
+        <div class="nav-left">
+          <a href="{{ url_for('about') }}">About Us</a>
+        </div>
+        <div class="nav-middle">
+          <a class="active" href="{{ url_for('home') }}">Home</a>
+        </div>
+        <div class="nav-right">
+          <a href="{{ url_for('results') }}">Results</a>
+        </div>
         
+      </nav>
+    </header>
 
-        <section class="feature-card fade-in" id="about">
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="typing-title">Finance Analyzer</h1>
+        <ul class="tagline">
+          <li>Identify Relevant Competitors</li>
+          <li>Deliver Insights</li>
+          <li>Optimize Capital Allocation</li>
+        </ul>
+      </section>
 
-            <h2>How It Works</h2>
-
-            <p>
-                This platform evaluates your organization's financial performance by
-                comparing its profitability, operational efficiency, and cash flow
-                against industry peers within the S&amp;P 500. Using financial
-                statement analysis and benchmarking techniques, the engine identifies
-                your company's relative strengths and potential areas for improvement.
-            </p>
-
-            <p>
-                Before beginning the analysis, please have your organization's
-                financial statements readily available. Most of the required inputs
-                can be obtained directly from your annual report or audited financial
-                statements, including:
-            </p>
-
-
-            <ul>
-
-                <li>Income Statement (Revenue, COGS, SG&amp;A, Marketing, R&amp;D, Net Income)</li>
-
-                <li>Balance Sheet (Current Assets and Current Liabilities)</li>
-
-                <li>Statement of Cash Flows (Capital Expenditures, Non-Cash Expenses, Operating Cash Flow components)</li>
-
-                <li>Supporting accounting information such as Depreciation and Amortization</li>
-
-            </ul>
-
-            <p>
-                Once submitted, your organization's financial metrics are benchmarked
-                against companies within the same GICS industry sector to generate a
-                comprehensive financial performance assessment.
-            </p>
-
-            <a style="text-align: center; display: block;" href="#home">Go Back</a>
-
-        </section>
-
-        <section class="feature-card fade-in" id="metrics">
-
-            <h2>Metrics Evaluated</h2>
-
-            <ul>
-
-                <li>Revenue</li>
-
-                <li>Net Income</li>
-
-                <li>Net Income Margin</li>
-
-                <li>EBITDA</li>
-
-                <li>Working Capital</li>
-
-                <li>Operating Cash Flow</li>
-
-                <li>Free Cash Flow</li>
-
-            </ul>
-
-            <a style="text-align: center; display: block;" href="#home">Go Back</a>
-
-        </section>
-
-        <section class="feature-card fade-in" id="features">
-
-            <h2>Analysis Features</h2>
-
-            <ul>
-
-                <li>
-                    <strong>Industry Benchmarking</strong><br>
-                    Compare your organization's financial performance against industry
-                    averages derived from companies within the S&amp;P 500.
-                </li>
-
-                <br>
-
-                <li>
-                    <strong>Financial Metric Rankings</strong><br>
-                    Rank profitability metrics and cash-flow metrics relative to peer organizations
-                    while identifying neighboring competitors with higher and lower
-                    financial performance.
-                </li>
-
-                <br>
-
-                <li>
-                    <strong>Decision Tree Classification</strong><br>
-                    Utilize a custom-built decision tree to classify the organization as
-                    <em>Industry Leader</em>, <em>Efficient but Under-Scaled</em>,
-                    <em>Margin Strong but Operationally Weak</em>,
-                    <em>Scale Without Efficiency</em>, or
-                    <em>Underperformer</em>.
-                </li>
-
-                <br>
-
-                <li>
-                    <strong>Strategic Recommendations</strong><br>
-                    Generate tailored financial recommendations based upon the
-                    organization's rankings, profitability profile, cash flow
-                    performance, and overall competitive position within its industry.
-                </li>
-
-            </ul>
-
-            <a style="text-align: center; display: block;" href="#home">Go Back</a>
-
-        </section>
-
-        <section class="feature-card fade-in" id="classification">
-
-            <h2>Classification Categories</h2>
-
-            <div class="classification">
-
-                <h3>Industry Leader</h3>
-                <p>
-                    Strong revenue scale, profitability,
-                    and operational efficiency.
-                </p>
-
-                <h3>Efficient but Under-Scaled</h3>
-                <p>
-                    Strong profitability but smaller
-                    market scale than competitors.
-                </p>
-
-                <h3>Margin Strong but Operationally Weak</h3>
-                <p>
-                    Healthy margins but weaker operating
-                    performance relative to peers.
-                </p>
-
-                <h3>Scale Without Efficiency</h3>
-                <p>
-                    Strong revenue generation but lower
-                    profitability and efficiency.
-                </p>
-
-                <h3>Underperformer</h3>
-                <p>
-                    Trails industry peers across
-                    multiple financial metrics.
-                </p>
-
+      <form action="/analysis" class="form-section" method="POST">
+        <section class="section">
+          <h2>Company</h2>
+          <div class="fields company">
+            <div class="field">
+              <label for="company_name">Company Name</label>
+              <input id="company_name" name="company_name" type="text" placeholder="Enter company name" autocomplete="organization" value="{{ inputs.name if inputs else '' }}" />
             </div>
-
-            <a style="text-align: center; display: block;" href="#home">Go Back</a>
-
+            <div class="field">
+              <label for="industry">Select Your Industry</label>
+              <select id="industry" name="industry">
+                <option value="">Choose an industry</option>
+                <option {% if inputs and inputs.get('industry') == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+                <option {% if inputs and inputs.get('industry') == 'Health Care' %}selected{% endif %}>Health Care</option>
+                <option {% if inputs and inputs.get('industry') == 'Financials' %}selected{% endif %}>Financials</option>
+                <option {% if inputs and inputs.get('industry') == 'Consumer Discretionary' %}selected{% endif %}>Consumer Discretionary</option>
+                <option {% if inputs and inputs.get('industry') == 'Consumer Staples' %}selected{% endif %}>Consumer Staples</option>
+                <option {% if inputs and inputs.get('industry') == 'Materials' %}selected{% endif %}>Materials</option>
+                <option {% if inputs and inputs.get('industry') == 'Industrials' %}selected{% endif %}>Industrials</option>
+                <option {% if inputs and inputs.get('industry') == 'Energy' %}selected{% endif %}>Energy</option>
+                <option {% if inputs and inputs.get('industry') == 'Communication Services' %}selected{% endif %}>Communication Services</option>
+                <option {% if inputs and inputs.get('industry') == 'Real Estate' %}selected{% endif %}>Real Estate</option>
+                <option {% if inputs and inputs.get('industry') == 'Utilities' %}selected{% endif %}>Utilities</option>
+              </select>
+            </div>
+          </div>
         </section>
 
-        <div class="button-container" id="Begin New Analysis">
-            <form action="/analysis" method="GET">
-                <button type="submit">
+        <section class="section">
+          <h2>Profitability</h2>
+          <div class="fields profitability">
+            <div class="field"><label for="revenue">Revenue</label><input id="revenue" name="revenue" type="number" min="0" value="{{ inputs.revenue if inputs else '' }}" required placeholder="Revenue" /></div>
+            <div class="field"><label for="cogs">COGS</label><input id="cogs" name="cogs" type="number" min="0" value="{{ inputs.cogs if inputs else '' }}" placeholder="COGS" /></div>
+            <div class="field"><label for="sga">SG&amp;A</label><input id="sga" name="sga" type="number" min="0" value="{{ inputs.sga if inputs else '' }}" placeholder="SG&amp;A" /></div>
+            <div class="field"><label for="marketing">Marketing Expense</label><input id="marketing" name="marketing" type="number" min="0" value="{{ inputs.marketing if inputs else '' }}" placeholder="Marketing Expense" /></div>
+            <div class="field"><label for="rd">R&amp;D Expense</label><input id="rd" name="rd" type="number" min="0" value="{{ inputs.rd if inputs else '' }}" placeholder="R&amp;D Expense" /></div>
+            <div class="field"><label for="depreciation">Depreciation</label><input id="depreciation" name="depreciation" type="number" min="0" value="{{ inputs.depreciation if inputs else '' }}" placeholder="Depreciation" /></div>
+            <div class="field"><label for="amortization">Amortization</label><input id="amortization" name="amortization" type="number" min="0" value="{{ inputs.amortization if inputs else '' }}" placeholder="Amortization" /></div>
+          </div>
+        </section>
 
-                <hover></hover>
-                Begin Financial Analysis
+        <section class="section">
+          <h2>Cash Flow</h2>
+          <div class="fields cashflow">
+            <div class="field"><label for="current_assets">Current Assets</label><input id="current_assets" name="current_assets" type="number" min="0" value="{{ inputs.current_assets if inputs else '' }}" placeholder="Current Assets" /></div>
+            <div class="field"><label for="current_liabilities">Current Liabilities</label><input id="current_liabilities" name="current_liabilities" type="number" min="0" value="{{ inputs.liabilities if inputs else '' }}" placeholder="Current Liabilities" /></div>
+            <div class="field"><label for="non_cash">Non-Cash Expenses</label><input id="non_cash" name="non_cash" type="number" min="0" value="{{ inputs.non_cash if inputs else '' }}" placeholder="Non-Cash Expenses" /></div>
+            <div class="field"><label for="change_wc">Changes in Working Capital</label><input id="change_wc" name="change_wc" type="number" min="0" value="{{ inputs.change_wc if inputs else '' }}" placeholder="Changes in Working Capital" /></div>
+            <div class="field"><label for="capex">Capital Expenditures</label><input id="capex" name="capex" type="number" min="0" value="{{ inputs.capex if inputs else '' }}" placeholder="Capital Expenditures" /></div>
+          </div>
+        </section>
 
-                </button>
-            </form>
-
-
+        <div class="actions">
+          <button class="analyze" type="submit">Analyze →</button>
         </div>
+        <p class="helper">Enter your financial data above to begin.</p>
+      </form>
+    </main>
 
-        <div class="footer-links">
-
-            <a href="https://www.linkedin.com/in/tharakram-nallan/" target="_blank">
-                LinkedIn
-            </a>
-
-            |
-
-            <a href="https://github.com/tharakram-nallan/" target="_blank">
-                GitHub
-            </a>
-
-            |
-
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tharakram.nallan@gmail.com" target="_blank">
-                Email Contact
-            </a>
-        </div>
-
-    </div>
-
-    <script>
-
-    const observer = new IntersectionObserver(
-
-    entries => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add("show");
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold: 0.15
-        }
-
-);
-
-document.querySelectorAll(".fade-in")
-    .forEach(element => {
-
-        observer.observe(element);
-
-    });
-
-</script>
-
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  
 </body>
-
 </html>
-

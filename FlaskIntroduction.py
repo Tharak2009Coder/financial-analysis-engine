@@ -8,7 +8,7 @@ last_inputs = None
 
 @app.route("/")
 def home():
-    return render_template("index.html", has_results=last_result is not None)
+    return render_template("index.html", has_results=last_result is not None, inputs=last_inputs)
 
 
 @app.route("/analysis", methods=["GET", "POST"])
@@ -17,7 +17,7 @@ def analysis():
     global last_result
     global last_inputs
     if request.method == "GET":
-        return render_template("analysis.html", inputs=last_inputs)
+        return render_template("results.html", inputs=last_inputs)
 
     name = request.form["company_name"]
     industry = request.form["industry"]
@@ -74,7 +74,14 @@ def analysis():
     last_result = result
     return redirect(url_for("results"))
 
-@app.route("/new-analysis")
+   
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+#Will probably don't need the new analysis since the client can just Edit the metrics in homepage
+"""@app.route("/new-analysis")
 def new_analysis():
 
     global last_result
@@ -83,11 +90,12 @@ def new_analysis():
     last_result = None
     last_inputs = None
 
-    return redirect(url_for("analysis"))
+    return redirect(url_for("index"))"""
 
 @app.route("/results")
-
 def results():
+    if last_result is None:
+        return redirect(url_for("home"))
 
     return render_template(
         "results.html",

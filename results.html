@@ -3,245 +3,909 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Financial Performance Analysis Engine</title>
+    <title>Financial Analyzer | Results</title>
 
     <link rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}">
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
-    <nav class="navbar">
-    
-    <ul class="nav-links">
-        <li><a href="/">Home</a></li>
+<style> 
+    :root {
+        --navy: #102a43;
+        --deep-blue: #163b5c;
+        --gold: #c99a3e;
+        --gold-light: #e1bd70;
+        --cream: #f7f4ec;
+        --white: --cream;
 
-        <li>
-            <a href="/analysis">
-                Edit Your Metrics
-            </a>
-        </li>
+        --text: black;
+        --muted: #64748b;
+
+        --border: #ded8ca;
+    }
 
 
-        <li><a href="/results">Your Results</a></li>
 
-        <li>
-            <a href="{{ url_for('new_analysis') }}">
-                Begin New Analysis
-            </a>
-        </li>
-    </ul>
-    </nav>
-<div class="container">
+/* ================= BODY ================= */
 
-    <!-- Hero Banner -->
-    <div class="hero" id="top">
+    body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--text);
 
-        <h1>Financial Performance Report</h1>
+        font-family: Arial, Helvetica, sans-serif;
 
-        <h3>{{ result.company }}</h3>
+        line-height: 1.6;
+    }
 
-        <p>{{ result.industry }} Sector</p>
 
-        <span class="status">
-            ✓ Analysis Successfully Completed
-        </span>
+    /* ================= NAVBAR ================= */
 
-    </div>
+    nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
 
-    <!-- Navigation -->
-    <div class="dashboard-nav">
+    padding: 15px 5%;
+}
 
-        <a href="#summary">Company Summary</a>
 
-        <a href="#classification">Classification</a>
+    /* LEFT */
 
-        <a href="#revenue">Revenue</a>
+    .nav-left {
+        justify-self: start;
+    }
 
-        <a href="#income">Net Income</a>
 
-        <a href="#ebitda">EBITDA</a>
+    /* CENTER */
 
-        <a href="#cashflow">Cash Flow</a>
+    .nav-middle {
+        justify-self: center;
 
-        <a href="#recommendations">Recommendations</a>
+        display: flex;
+        align-items: center;
+
+        gap: 20px;
+    }
+
+
+    /* RIGHT */
+
+    .nav-right {
+        justify-self: end;
+    }
+
+
+    /* LINKS */
+
+    nav a {
+        color: black;
+        text-decoration: none;
+
+        font-weight: 700;
+        font-size: 17px;
+
+        transition: color 160ms ease;
+    }
+
+
+    /* HOVER = ORANGE */
+
+    nav a:hover { opacity: 0.62; }
+
+
+    /* CURRENT PAGE */
+
+    nav a.active {
+        color: orange;
+    }
+
+
+    /* ================= CONTAINER ================= */
+
+    .container {
+        width: min(1100px, 90%);
+
+        margin: 0 auto;
+
+        padding: 50px 0 80px;
+    }
+
+
+    /* ================= HERO ================= */
+
+    .hero {
+        background: var(--navy);
+
+        color: white;
+
+        border-radius: 14px;
+
+        padding: 55px 50px;
+
+        margin-bottom: 25px;
+
+        border-left: 6px solid var(--gold);
+
+        box-shadow: 0 10px 30px rgba(16, 42, 67, 0.12);
+    }
+
+
+    .hero-label,
+    .section-label {
+        color: var(--gold);
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        letter-spacing: 2px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 8px;
+    }
+
+
+    .hero h1 {
+        margin: 0 0 12px;
+
+        color: white;
+
+        font-size: clamp(32px, 5vw, 50px);
+
+        line-height: 1.1;
+    }
+
+
+    .hero h3 {
+        margin: 15px 0 0;
+
+        color: var(--gold-light);
+
+        font-size: 22px;
+    }
+
+
+    .hero p {
+        margin: 3px 0 20px;
+
+        color: #d9e2ec;
+    }
+
+
+    .status {
+        display: inline-block;
+
+        padding: 7px 14px;
+
+        border-radius: 20px;
+
+        background: rgba(201, 154, 62, 0.15);
+
+        border: 1px solid var(--gold);
+
+        color: var(--gold-light);
+
+        font-size: 13px;
+
+        font-weight: 700;
+    }
+
+
+    /* ================= DASHBOARD NAV ================= */
+
+    .dashboard-nav {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        padding: 15px;
+
+        margin-bottom: 25px;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 12px;
+
+        box-shadow: 0 4px 15px rgba(16, 42, 67, 0.05);
+
+        position: flex;
+
+        top: 10px;
+
+        z-index: 10;
+    }
+
+
+    .dashboard-nav a {
+        padding: 9px 13px;
+
+        color: var(--deep-blue);
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        border-radius: 7px;
+
+        transition: 0.2s ease;
+    }
+
+
+    .dashboard-nav a:hover {
+        background: var(--navy);
+
+        color: var(--gold-light);
+    }
+
+
+    /* ================= CARDS ================= */
+
+    .feature-card {
+        background: var(--white);
+
+        border: 1px solid var(--border);
+
+        border-radius: 14px;
+
+        padding: 35px;
+
+        margin-bottom: 25px;
+
+        box-shadow: 0 6px 20px rgba(16, 42, 67, 0.06);
+    }
+
+
+    .feature-card h2 {
+        color: var(--navy);
+
+        margin-top: 0;
+
+        margin-bottom: 20px;
+
+        font-size: 25px;
+    }
+
+
+    .feature-card h4 {
+        color: var(--deep-blue);
+
+        margin-bottom: 5px;
+    }
+
+
+    .feature-card p {
+        color: var(--text);
+    }
+
+
+    .feature-card hr {
+        border: 0;
+
+        border-top: 1px solid var(--border);
+
+        margin: 25px 0;
+    }
+
+
+    /* ================= LISTS ================= */
+
+    .feature-card li {
+        margin-bottom: 10px;
+    }
+
+
+    .feature-card li::marker {
+        color: var(--gold);
+    }
+
+
+    /* ================= CLASSIFICATION ================= */
+
+    .classification-box {
+        background: #f5efe1;
+
+        border-left: 5px solid var(--gold);
+
+        border-radius: 8px;
+
+        padding: 20px 24px;
+
+        color: var(--navy);
+
+        font-size: 18px;
+
+        font-weight: 700;
+    }
+
+
+    /* ================= RANKING ================= */
+
+    .metric-rank {
+        color: var(--gold) !important;
+
+        font-weight: 800;
+
+        font-size: 17px;
+    }
+
+
+    /* ================= CHARTS ================= */
+
+    .chart-container {
+        margin: 30px auto;
+
+        text-align: center;
+
+        padding: 20px;
+
+        background: #faf9f5;
+
+        border: 1px solid var(--border);
+
+        border-radius: 10px;
+    }
+
+
+    .chart-container img {
+        display: block;
+
+        max-width: 100%;
+
+        width: 500px;
+
+        height: auto;
+
+        margin: 0 auto;
+    }
+
+
+    /* ================= CASH METRICS ================= */
+
+    .metric-grid {
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 15px;
+
+        margin-top: 20px;
+    }
+
+
+    .metric-item {
+        background: var(--navy);
+
+        border-radius: 10px;
+
+        padding: 22px;
+
+        text-align: center;
+    }
+
+
+    .metric-item span {
+        display: block;
+
+        color: #d9e2ec;
+
+        font-size: 13px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .metric-item strong {
+        display: block;
+
+        color: var(--gold-light);
+
+        font-size: 23px;
+    }
+
+
+    /* ================= LINKS ================= */
+
+    .detail-link {
+        display: inline-block;
+
+        margin-top: 10px;
+
+        color: var(--deep-blue);
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+
+    .detail-link:hover {
+        color: var(--gold);
+    }
+
+
+    .back-dashboard {
+        display: block;
+
+        margin-top: 30px;
+
+        text-align: center;
+
+        color: var(--deep-blue);
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+
+    .back-dashboard:hover {
+        color: var(--gold);
+    }
+
+
+    /* ================= RECOMMENDATIONS ================= */
+
+    .recommendations-card {
+        border-top: 5px solid var(--gold);
+    }
+
+
+    .recommendation-intro {
+        color: var(--muted) !important;
+
+        font-style: italic;
+
+        margin-bottom: 25px;
+    }
+
+
+    /* ================= FADE ================= */
+
+    .fade-in {
+        animation: fadeIn 0.5s ease;
+    }
+
+
+    @keyframes fadeIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 750px) {
+
+
+        .hero {
+            padding: 35px 25px;
+        }
+
+
+        .feature-card {
+            padding: 25px 20px;
+        }
+
+
+        .metric-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .dashboard-nav {
+            position: static;
+        }
+
+    }
+</style>
+
+<body id="top">
+
+    <!-- ================= NAVBAR ================= -->
+    <header>
+      <nav aria-label="Primary navigation">
+        <div class="nav-left">
+          <a href="{{ url_for('about') }}">About Us</a>
+        </div>
+        <div class="nav-middle">
+          <a href="{{ url_for('home') }}">Home</a>
+        </div>
+        <div class="nav-right">
+          <a href="{{ url_for('results') }}" class="active">Results</a>
+        </div>
         
-
-    </div>
-
-
-    <!-- Company Summary -->
-
-    <section class="feature-card fade-in" id="summary">
-
-        <h2>📊 Company Summary</h2>
-
-        <ul>
-
-        {% for item in result.summary %}
-
-            <li>{{ item }}</li>
-
-        {% endfor %}
-
-        </ul>
-
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
-
-    </section>
+      </nav>
+    </header>
 
 
-    <!-- Classification -->
+    <div class="container">
 
-    <section class="feature-card fade-in" id="classification">
+        <!-- ================= HERO ================= -->
 
-        <h2>🧠 Decision Tree Classification</h2>
+        <div class="hero" id="top">
 
-        <div class="classification-box">
+            <div class="hero-label">
+                FINANCE ANALYZER
+            </div>
 
-            {{ result.classification }}
+            <h1>Financial Analyzer Results</h1>
+
+            <h3>{{ result.company }}</h3>
+
+            <p>{{ result.industry }} Sector</p>
+
+            <span class="status">
+                ✓ Analysis Successfully Completed
+            </span>
 
         </div>
 
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
 
-    </section>
+        <!-- ================= DASHBOARD NAVIGATION ================= -->
 
+        <div class="dashboard-nav">
 
-    <!-- Revenue -->
+            <a href="#summary">Company Summary</a>
 
-    <section class="feature-card fade-in" id="revenue">
+            <a href="#classification">Classification</a>
 
-        <h2>{{ result.revenue.title }}</h2>
+            <a href="#revenue">Revenue</a>
 
-        <p>{{ result.revenue.rank }}</p>
+            <a href="#income">Net Income</a>
 
-        <p>{{ result.revenue.explanation }}</p>
+            <a href="#ebitda">EBITDA</a>
 
-        <hr>
+            <a href="#cashmetrics">Cash Metrics</a>
 
-        <h4>{{ result.revenue.lpTitle }}</h4>
+            <a href="#cashflow">Cash Flow</a>
 
-        <p>{{ result.revenue.lpRevenue }}</p>
+            <a href="#recommendations">Recommendations</a>
 
-        <h4>{{ result.revenue.rpTitle }}</h4>
-
-        <p>{{ result.revenue.rpRevenue }}</p>
-
-        <a href="{{ url_for('revenue') }}">View Revenue Details</a>
-
-        <img src="{{ url_for('static',
-                     filename='revenue_ranking.png') }}" width="500" position="bottom; fixed">
-        
-
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
-
-    </section>
+        </div>
 
 
-    <!-- Net Income -->
+        <!-- ================= COMPANY SUMMARY ================= -->
 
-    <section class="feature-card fade-in" id="income">
+        <section class="feature-card fade-in" id="summary">
 
-        <h2>{{ result.net_income.title }}</h2>
+            <div class="section-label">
+                OVERVIEW
+            </div>
 
-        <p>{{ result.net_income.rank }}</p>
+            <h2>Company Summary</h2>
 
-        <p>{{ result.net_income.explanation }}</p>
+            <ul>
 
-        <hr>
+                {% for item in result.summary %}
 
-        <h4>{{ result.net_income.lpTitle }}</h4>
+                    <li>{{ item }}</li>
 
-        <p>{{ result.net_income.lpNetIncome }}</p>
+                {% endfor %}
 
-        <h4>{{ result.net_income.rpTitle }}</h4>
+            </ul>
 
-        <p>{{ result.net_income.rpNetIncome }}</p>
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
 
-        <img src="{{ url_for('static',
-                     filename='net_income_ranking.png') }}" width="500" position="bottom; fixed">
-
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
-
-        
-
-    </section>
+        </section>
 
 
-    <!-- EBITDA -->
+        <!-- ================= CLASSIFICATION ================= -->
 
-    <section class="feature-card fade-in" id="ebitda">
+        <section class="feature-card fade-in" id="classification">
 
-        <h2>{{ result.ebitda.title }}</h2>
+            <div class="section-label">
+                DECISION MODEL
+            </div>
 
-        <p>{{ result.ebitda.rank }}</p>
+            <h2>Decision Tree Classification</h2>
 
-        <p>{{ result.ebitda.explanation }}</p>
+            <div class="classification-box">
 
-        <hr>
+                {{ result.classification }}
 
-        <h4>{{ result.ebitda.lpTitle }}</h4>
+            </div>
 
-        <p>{{ result.ebitda.lpEBITDA }}</p>
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
 
-        <h4>{{ result.ebitda.rpTitle }}</h4>
+        </section>
 
-        <p>{{ result.ebitda.rpEBITDA }}</p>
 
-        <img src="{{ url_for('static',
-                     filename='ebitda_ranking.png') }}" width="500" position="bottom; fixed">
+        <!-- ================= REVENUE ================= -->
 
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+        <section class="feature-card fade-in" id="revenue">
 
-    </section>
+            <div class="section-label">
+                PROFITABILITY
+            </div>
 
-    <section class="feature-card fade-in" id="cashmetrics">
+            <h2>{{ result.revenue.title }}</h2>
 
-        <h2>Cash Flow Metrics</h2>
+            <p class="metric-rank">
+                {{ result.revenue.rank }}
+            </p>
 
-        <p><strong>Working Capital:</strong>
-            ${{ "{:,.0f}".format(result.cash_metrics.working_capital) }}
-        </p>
+            <p>
+                {{ result.revenue.explanation }}
+            </p>
 
-        <p><strong>Operating Cash Flow:</strong>
-            ${{ "{:,.0f}".format(result.cash_metrics.operating_cash_flow) }}
-        </p>
+            <hr>
 
-        <p><strong>Free Cash Flow:</strong>
-            ${{ "{:,.0f}".format(result.cash_metrics.free_cash_flow) }}
-        </p>
+            <h4>{{ result.revenue.lpTitle }}</h4>
 
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+            <p>
+                {{ result.revenue.lpRevenue }}
+            </p>
 
-    </section>
-    <section class="feature-card fade-in" id="cashflow">
+            <h4>{{ result.revenue.rpTitle }}</h4>
 
-        <h2>Cash Flow Analysis</h2>
+            <p>
+                {{ result.revenue.rpRevenue }}
+            </p>
 
-        <p>{{ result.cash_ctx }}</p>
+            <div class="chart-container">
 
-        <ul>
+                <img
+                    src="{{ url_for('static',
+                    filename='revenue_ranking.png') }}"
+                    alt="Revenue ranking comparison"
+                >
 
-            {% for explanation in result.cash_flow_analyzer %}
+            </div>
 
-                <li>{{ explanation }}</li>
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
 
-            {% endfor %}
+        </section>
 
-        </ul>
 
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
+        <!-- ================= NET INCOME ================= -->
 
-    </section>
-    
-    <section class="feature-card fade-in" id="recommendations">
+        <section class="feature-card fade-in" id="income">
 
-        <h2>Recommendations</h2>
+            <div class="section-label">
+                PROFITABILITY
+            </div>
 
-        <ul>
-            {% for recommendation in result.recommendations %}
-                <li>{{ recommendation }}</li>
-            {% endfor %}
-        </ul>
-        <a style="text-align: center; display: block;" href="#top">Go to DashBoard</a>
-    </section>
+            <h2>{{ result.net_income.title }}</h2>
+
+            <p class="metric-rank">
+                {{ result.net_income.rank }}
+            </p>
+
+            <p>
+                {{ result.net_income.explanation }}
+            </p>
+
+            <hr>
+
+            <h4>{{ result.net_income.lpTitle }}</h4>
+
+            <p>
+                {{ result.net_income.lpNetIncome }}
+            </p>
+
+            <h4>{{ result.net_income.rpTitle }}</h4>
+
+            <p>
+                {{ result.net_income.rpNetIncome }}
+            </p>
+
+            <div class="chart-container">
+
+                <img
+                    src="{{ url_for('static',
+                    filename='net_income_ranking.png') }}"
+                    alt="Net income ranking comparison"
+                >
+
+            </div>
+
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- ================= EBITDA ================= -->
+
+        <section class="feature-card fade-in" id="ebitda">
+
+            <div class="section-label">
+                OPERATING PERFORMANCE
+            </div>
+
+            <h2>{{ result.ebitda.title }}</h2>
+
+            <p class="metric-rank">
+                {{ result.ebitda.rank }}
+            </p>
+
+            <p>
+                {{ result.ebitda.explanation }}
+            </p>
+
+            <hr>
+
+            <h4>{{ result.ebitda.lpTitle }}</h4>
+
+            <p>
+                {{ result.ebitda.lpEBITDA }}
+            </p>
+
+            <h4>{{ result.ebitda.rpTitle }}</h4>
+
+            <p>
+                {{ result.ebitda.rpEBITDA }}
+            </p>
+
+            <div class="chart-container">
+
+                <img
+                    src="{{ url_for('static',
+                    filename='ebitda_ranking.png') }}"
+                    alt="EBITDA ranking comparison"
+                >
+
+            </div>
+
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- ================= CASH METRICS ================= -->
+
+        <section class="feature-card fade-in" id="cashmetrics">
+
+            <div class="section-label">
+                LIQUIDITY & CAPITAL
+            </div>
+
+            <h2>Cash Flow Metrics</h2>
+
+            <div class="metric-grid">
+
+                <div class="metric-item">
+
+                    <span>Working Capital</span>
+
+                    <strong>
+                        ${{ "{:,.0f}".format(
+                            result.cash_metrics.working_capital
+                        ) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-item">
+
+                    <span>Operating Cash Flow</span>
+
+                    <strong>
+                        ${{ "{:,.0f}".format(
+                            result.cash_metrics.operating_cash_flow
+                        ) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-item">
+
+                    <span>Free Cash Flow</span>
+
+                    <strong>
+                        ${{ "{:,.0f}".format(
+                            result.cash_metrics.free_cash_flow
+                        ) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- ================= CASH FLOW ANALYSIS ================= -->
+
+        <section class="feature-card fade-in" id="cashflow">
+
+            <div class="section-label">
+                CASH FLOW
+            </div>
+
+            <h2>Cash Flow Analysis</h2>
+
+            <p>
+                {{ result.cash_ctx }}
+            </p>
+
+            <ul>
+
+                {% for explanation in result.cash_flow_analyzer %}
+
+                    <li>{{ explanation }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- ================= RECOMMENDATIONS ================= -->
+
+        <section class="feature-card recommendations-card fade-in"
+                 id="recommendations">
+
+            <div class="section-label">
+                STRATEGIC INSIGHTS
+            </div>
+
+            <h2>Recommendations</h2>
+
+            <p class="recommendation-intro">
+                Strategic recommendations based on the company's
+                financial performance and capital position.
+            </p>
+
+            <ul>
+
+                {% for recommendation in result.recommendations %}
+
+                    <li>{{ recommendation }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            <a class="back-dashboard" href="#top">
+                ↑ Back to Dashboard
+            </a>
+
+        </section>
+
+
+    </div>
+
+</body>
+
+</html>
+
