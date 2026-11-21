@@ -1,8 +1,8 @@
-# Financial Performance Analysis Engine
+# Finance Analyzer
 
 ## Overview
 
-The Financial Performance Analysis Engine is a Python-based financial benchmarking and analytics system designed to evaluate company performance relative to industry peers.
+The Finance Analyzer is a Python-based financial benchmarking and analytics system designed to evaluate company performance relative to industry peers.
 
 The project dynamically retrieves financial statement data using the Yahoo Finance API (`yfinance`) and performs profitability, operational, and cash-flow analysis by calculating metrics such as:
 
