@@ -110,5 +110,16 @@ def revenue():
         result=last_result
     )
 
+@app.route("/details/<metric>")
+def metric_details(metric):
+    if last_result is None:
+        return redirect(url_for("home"))
+
+    details = last_result.get("metric_details", {}).get(metric)
+    if details is None:
+        return redirect(url_for("results"))
+
+    return render_template("metric_details.html", details=details)
+
 if __name__ == "__main__":
     app.run(debug=True)

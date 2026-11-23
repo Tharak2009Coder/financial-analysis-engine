@@ -1,0 +1,20 @@
+
+1) Analyze about the companies "Dun and Bradsheet" and "Crisil" to find out about how companies area
+   rated relative to the amount of capital, liabilities, stocks, and other criteria.
+
+2) Try to get the competitor's products (both left and right peer) by calling a specific yfinance
+command. This workflow/process will help the user/client organization to get insights into how 
+innovative and productive the right peer companies are
+
+3) Create an AWS Developer Acct and explore and learn about storing data on cloud 
+
+4) Redesign your UI/UX flow for this service to look as a more professional website.
+
+5) Add a separate dashboard and show history/overall chart to illustrate the performance of company 
+compared in a monthly basis. 
+
+6) Use the same design to display dashboard/overall company summary/recommendations but with
+orange instead of blue
+
+7) Explore Netlify/Vercel for free website hosting... Firebase/Supabase for database/authentication
+    

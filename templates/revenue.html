@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Revenue Insights | Finance Analyzer
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVIGATION BAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <ul class="nav-links">
+
+            <li>
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('results') }}">
+                    Results
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('analysis') }}">
+                    Edit Your Metrics
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- =========================
+         REVENUE PAGE
+    ========================== -->
+
+    <main class="insights-container">
+
+        <section class="insights-header">
+
+            <h1>
+                Revenue Insights
+            </h1>
+
+            <p>
+                Analyze your company's revenue position
+                relative to nearby industry peers.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             REVENUE GRAPH
+        ========================== -->
+
+        <section class="insight-card">
+
+            <h2>
+                Revenue Benchmark Comparison
+            </h2>
+
+            <p>
+                The graph compares your company's revenue
+                with the closest lower- and higher-ranked
+                companies in the selected industry.
+            </p>
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='revenue_ranking.png'
+                ) }}"
+                alt="Revenue comparison graph"
+                class="insight-graph"
+            >
+
+        </section>
+
+
+        <!-- =========================
+             REVENUE INTERPRETATION
+        ========================== -->
+
+        <section class="insight-card">
+
+            <h2>
+                Revenue Interpretation
+            </h2>
+
+            <p>
+
+                {{ result.rev_analysis }}
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             STRATEGIC INSIGHT
+        ========================== -->
+
+        <section class="insight-card">
+
+            <h2>
+                Strategic Considerations
+            </h2>
+
+            <p>
+
+                Revenue rankings show the company's
+                relative scale within its industry.
+                The comparison should be considered
+                alongside profitability, growth rate,
+                customer demand, and operating efficiency.
+
+            </p>
+
+            <p>
+
+                A higher-ranked peer may provide useful
+                information about business segments,
+                product offerings, market reach, or
+                growth strategies. However, revenue
+                alone does not establish why the peer
+                performs at a higher level.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             RETURN BUTTON
+        ========================== -->
+
+        <a
+            href="{{ url_for('results') }}"
+            class="view-details-button"
+        >
+
+            ← Return to Results
+
+        </a>
+
+    </main>
+
+
+</body>
+
+</html>
