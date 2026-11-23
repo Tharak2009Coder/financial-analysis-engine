@@ -8,6 +8,7 @@ from DataVisualization import DataVisualization
 from ProfAnalyzer import ProfAnalyzer
 
 import os
+from urllib.parse import quote
 
 import pandas as pd
 import yfinance as yf
@@ -734,6 +735,67 @@ class Runner:
             cash_ctx
         )
 
+        # Provide a consistent research link and the nearest higher-valued peer
+        # for each metric shown on the results page.
+        def build_metric_detail(metric, column, company_value, peer=None,
+                                yahoo_section="financials"):
+            if peer is None or float(peer[column]) <= company_value:
+                valid_peers = peers_df.dropna(subset=[column]).sort_values(column)
+                higher_peers = valid_peers[valid_peers[column] > company_value]
+                if not higher_peers.empty:
+                    peer = higher_peers.iloc[0].to_dict()
+                else:
+                    peer = None
+
+            peer_detail = None
+            if peer is not None:
+                symbol = str(peer.get("Symbol", "")).strip()
+                peer_detail = {
+                    "name": peer.get("Security", symbol),
+                    "symbol": symbol,
+                    "value": float(peer[column]),
+                    "yahoo_url": (
+                        f"https://finance.yahoo.com/quote/{quote(symbol, safe='.-^')}/"
+                        f"{yahoo_section}/"
+                    ) if symbol else None,
+                }
+
+            return {
+                "name": metric,
+                "company_value": float(company_value),
+                "peer": peer_detail,
+                "data_note": (
+                    "Peer values come from the app's local dataset "
+                    "(updated_financial_dataset.csv when available; otherwise "
+                    "financial_dataset.csv). The dataset does not currently "
+                    "record an as-of date."
+                ),
+            }
+
+        metric_details = {
+            "revenue": build_metric_detail(
+                "Revenue", "Revenue", company.revenue, ranking1["right_peer"]
+            ),
+            "net_income": build_metric_detail(
+                "Net Income", "Net Income", company.net_income, ranking2["right_peer"]
+            ),
+            "ebitda": build_metric_detail(
+                "EBITDA", "EBITDA", company.ebitda, ranking3["right_peer"]
+            ),
+            "free_cash_flow": build_metric_detail(
+                "Free Cash Flow", "Free Cash Flow", cash.fcf,
+                yahoo_section="cash-flow"
+            ),
+            "working_capital": build_metric_detail(
+                "Working Capital", "Working Capital", cash.workingCapital,
+                yahoo_section="balance-sheet"
+            ),
+            "operating_cash_flow": build_metric_detail(
+                "Operating Cash Flow", "Operating Cash Flow", cash.operatingCF,
+                yahoo_section="cash-flow"
+            ),
+        }
+
         return {
             "company": name,
             "industry": industry,
@@ -774,7 +836,8 @@ class Runner:
             },
             "cash_metrics": cash_ctx,
             "cash_flow_analyzer": explanations,
-            "recommendations": recommendations
+            "recommendations": recommendations,
+            "metric_details": metric_details,
         }
 
     def run(self):
